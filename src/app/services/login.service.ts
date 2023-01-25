@@ -12,14 +12,18 @@ export class LoginService {
 
   constructor(private http:HttpClient) { }
 
-  //metodo para hacer llamado a api de generacion de token
+  //generamos el token
   public generateToken(loginData:any){
     return this.http.post(`${baseUrl}/generate-token`,loginData);
   }
 
-  //iniciamos sesion y establecemos el token en localStorage
+  public getCurrentUser(){
+    return this.http.get(`${baseUrl}/actual-usuario`);
+  }
+
+  //iniciamos sesión y establecemos el token en el localStorage
   public loginUser(token:any){
-    localStorage.setItem('token', token);
+    localStorage.setItem('token',token);
     return true;
   }
 
@@ -32,7 +36,7 @@ export class LoginService {
     }
   }
 
-  //cerramos sesion y eliminamos el token del localStorage
+  //cerranis sesion y eliminamos el token del localStorage
   public logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -58,12 +62,9 @@ export class LoginService {
     }
   }
 
-  public getUserRol(){
+  public getUserRole(){
     let user = this.getUser();
     return user.authorities[0].authority;
   }
 
-  public getCurrentUser(){
-    return this.http.get(`${baseUrl}/actual-usuario`);
-  }
 }
